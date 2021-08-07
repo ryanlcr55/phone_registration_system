@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build: .docker
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - db
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www:cached
+    networks:
+      - app-network
+
+  # Web server
+  web:
+    image: nginx:mainline
+    restart: unless-stopped
+    ports:
+      - "8088:80"
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    tty: true
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "33061:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  db_data:
+    driver: local
