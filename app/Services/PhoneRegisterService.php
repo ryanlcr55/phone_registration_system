@@ -24,7 +24,6 @@ class PhoneRegisterService
     public function dispatchPhoneRegisterJob(string $phoneNum, string $storeCode, string $registrationDatetime)
     {
         PhoneRegister::dispatch(...func_get_args())
-            ->onConnection('database')
             ->onQueue('create_phone_registration_recode');
     }
 
