@@ -10,18 +10,18 @@ use Illuminate\Support\Facades\Redis;
 
 class CreateStoreCodeService
 {
-    protected $storeCodeEntity;
+    protected $storeCodeModel;
 
     public function __construct(
-        StoreCode $storeCodeEntity
+        StoreCode $storeCodeModel
     ) {
-        $this->storeCodeEntity = $storeCodeEntity;
+        $this->storeCodeModel = $storeCodeModel;
     }
 
     public function createStoreCode(string $storeName,float $lan,float $lon) {
         try {
             DB::beginTransaction();
-            $storeCode = $this->storeCodeEntity::query()
+            $storeCode = $this->storeCodeModel::query()
                 ->create([
                     'store_name' => $storeName,
                     'lan' => $lan,
@@ -30,10 +30,10 @@ class CreateStoreCodeService
             $storeCode->update([
                 'store_code' => base_convert($storeCode->id, 10, 16),
             ]);
-            $storeCode = $this->storeCodeEntity::query()->find($storeCode->id);
+            $storeCode = $this->storeCodeModel::query()->find($storeCode->id);
             DB::commit();
 
-            Redis::hset($this->storeCodeEntity::REDIS_KEY, $storeCode, $this->storeCodeEntity::redisDataForm($storeCode));
+            Redis::hset($this->storeCodeModel::REDIS_KEY, $storeCode, $this->storeCodeModel::redisDataForm($storeCode));
             return $storeCode;
         } catch (\Exception $e) {
             DB::rollBack();

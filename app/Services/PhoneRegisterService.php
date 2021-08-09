@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Redis;
 
 class PhoneRegisterService
 {
-    protected $phoneRegistrationRecordEntity;
-    protected $storeCodeEntity;
+    protected $phoneRegistrationRecordModel;
+    protected $storeCodeModel;
 
     public function __construct(
-        PhoneRegistrationRecord $phoneRegistrationRecordEntity,
-        StoreCode $storeCodeEntity
+        PhoneRegistrationRecord $phoneRegistrationRecordModel,
+        StoreCode $storeCodeModel
     ) {
-        $this->phoneRegistrationRecordEntity = $phoneRegistrationRecordEntity;
-        $this->storeCodeEntity = $storeCodeEntity;
+        $this->phoneRegistrationRecordModel = $phoneRegistrationRecordModel;
+        $this->storeCodeModel = $storeCodeModel;
     }
 
     public function dispatchPhoneRegisterJob(string $phoneNum, string $storeCode, string $registrationDatetime)
@@ -35,7 +35,7 @@ class PhoneRegisterService
     public function register(string $phoneNum, string $storeCode, string $registrationDatetime)
     {
         try {
-            $this->phoneRegistrationRecordEntity::query()->create([
+            $this->phoneRegistrationRecordModel::query()->create([
                 'phone_num' => $phoneNum,
                 'store_code' => $storeCode,
                 'registration_datetime' => $registrationDatetime,
@@ -51,15 +51,15 @@ class PhoneRegisterService
      */
     public function checkStoreCodeExist(string $storeCode): bool
     {
-        if (Redis::hexists($this->storeCodeEntity::REDIS_KEY, $storeCode)) {
+        if (Redis::hexists($this->storeCodeModel::REDIS_KEY, $storeCode)) {
             return true;
         }
 
-        $existedStoreCode =  $this->storeCodeEntity::query()
+        $existedStoreCode =  $this->storeCodeModel::query()
             ->where('store_code', '=', $storeCode)
             ->first();
         if ($existedStoreCode) {
-            Redis::hset($this->storeCodeEntity::REDIS_KEY, $storeCode, $this->storeCodeEntity::redisDataForm($existedStoreCode));
+            Redis::hset($this->storeCodeModel::REDIS_KEY, $storeCode, $this->storeCodeModel::redisDataForm($existedStoreCode));
             return true;
         }
 
