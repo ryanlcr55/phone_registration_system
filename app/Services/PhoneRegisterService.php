@@ -7,6 +7,7 @@ use App\Entities\PhoneRegistrationRecord;
 use App\Entities\StoreCode;
 use App\Jobs\PhoneRegister;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class PhoneRegisterService
 {
@@ -23,6 +24,9 @@ class PhoneRegisterService
 
     public function dispatchPhoneRegisterJob(string $phoneNum, string $storeCode, string $registrationDatetime)
     {
+        throw_unless($this->checkStoreCodeExist($storeCode),
+            new \Exception('store code does not exist'));
+
         PhoneRegister::dispatch(...func_get_args())
             ->onQueue('create_phone_registration_recode');
     }
@@ -30,16 +34,13 @@ class PhoneRegisterService
     public function register(string $phoneNum, string $storeCode, string $registrationDatetime)
     {
         try {
-            throw_unless($this->checkStoreCodeExist($storeCode),
-                new \Exception('store code does not exist'));
-
             $this->phoneRegistrationRecordEntity::query()->create([
                 'phone_num' => $phoneNum,
                 'store_code' => $storeCode,
                 'registration_datetime' => $registrationDatetime,
             ]);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error("[register fail] phone:$phoneNum, store code: $storeCode, time: $storeCode, reason: ".$e->getMessage());
         }
     }
 
@@ -47,10 +48,21 @@ class PhoneRegisterService
      * @param  string  $storeCode
      * @return bool
      */
-    public function checkStoreCodeExist(string  $storeCode) : bool
+    public function checkStoreCodeExist(string $storeCode): bool
     {
-        return $this->storeCodeEntity::query()
+        if (Redis::hexists($this->storeCodeEntity::REDIS_KEY, $storeCode)) {
+            return true;
+        }
+
+        $existedStoreCode =  $this->storeCodeEntity::query()
             ->where('store_code', '=', $storeCode)
-            ->exists();
+            ->first();
+        if ($existedStoreCode) {
+            Redis::hset($this->storeCodeEntity::REDIS_KEY, $storeCode, $this->storeCodeEntity::redisDataForm($existedStoreCode));
+            return true;
+        }
+
+        return false;
     }
+
 }
