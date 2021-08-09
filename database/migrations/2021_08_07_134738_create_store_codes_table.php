@@ -16,7 +16,7 @@ class CreateStoreCodesTable extends Migration
         Schema::create('store_codes', function (Blueprint $table) {
             $table->id();
             $table->string('store_name', 100);
-            $table->string('store_code', 100)->unique();
+            $table->string('store_code', 100)->unique()->nullable();
             $table->float('lat');
             $table->float('lon');
             $table->timestamps();
