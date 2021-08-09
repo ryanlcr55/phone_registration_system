@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\Entities\StoreCode;
+use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
@@ -36,6 +37,7 @@ class CreateStoreCodeService
             return $storeCode;
         } catch (\Exception $e) {
             DB::rollBack();
+            throw new CustomException('Failed to generate store code', CustomException::ERROR_CODE_STORE_CODE_FAIL_TO_GENERATE);
         }
     }
 }

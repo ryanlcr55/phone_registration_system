@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCodeCreateRequest;
+use App\Http\Responses\CustomResponse;
 use App\Services\CreateStoreCodeService;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -24,6 +25,6 @@ class StoreCodeController extends BaseController
         $createStoreCodeService = app()->make(CreateStoreCodeService::class);
         $requestData = $request->validated();
 
-        return $createStoreCodeService->createStoreCode($requestData['store_name'], $requestData['lan'], $requestData['lon']);
+        return new CustomResponse($createStoreCodeService->createStoreCode($requestData['store_name'], $requestData['lan'], $requestData['lon']));
     }
 }

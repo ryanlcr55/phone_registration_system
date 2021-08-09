@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PhoneRegistrationRecordCreateRequest;
+use App\Http\Responses\CustomResponse;
 use App\Services\PhoneRegisterService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -26,6 +27,6 @@ class PhoneRegistrationRecordController extends BaseController
         $requestData = $request->validated();
         $phoneRegisterService->dispatchPhoneRegisterJob($requestData['phone_num'], $requestData['store_code'], Carbon::now());
 
-        return [];
+        return new CustomResponse();
     }
 }

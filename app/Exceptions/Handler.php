@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use http\Client\Response;
+use App\Http\Responses\CustomResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -48,8 +48,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request,  $exception)
     {
+        $statusCode = CustomException::ERROR_CODE_UNKNOWN;
+        if ($exception instanceof CustomException) {
+            $statusCode = $exception->getCode();
+        }
 
-        return response($exception->getMessage());
+        return (new CustomResponse(
+            null,
+            $statusCode,
+            config('app.debug') ? $exception->getMessage() : ''
+        ))->toResponse($request);
     }
 
 }

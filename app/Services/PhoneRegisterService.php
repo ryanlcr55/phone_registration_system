@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Entities\PhoneRegistrationRecord;
 use App\Entities\StoreCode;
+use App\Exceptions\CustomException;
 use App\Jobs\PhoneRegister;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -25,7 +26,7 @@ class PhoneRegisterService
     public function dispatchPhoneRegisterJob(string $phoneNum, string $storeCode, string $registrationDatetime)
     {
         throw_unless($this->checkStoreCodeExist($storeCode),
-            new \Exception('store code does not exist'));
+            new CustomException('store code does not exist', CustomException::ERROR_CODE_STORE_DOSE_NOT_EXISTED));
 
         PhoneRegister::dispatch(...func_get_args())
             ->onQueue('create_phone_registration_recode');
