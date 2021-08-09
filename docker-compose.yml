@@ -26,6 +26,18 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:alpine
+    restart: always
+    tty: true
+    command: redis-server
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/bitnami/redis/data
+    networks:
+      - app-network
+
   db:
     image: mysql:8.0
     restart: unless-stopped
@@ -50,4 +62,6 @@ networks:
 #Volumes
 volumes:
   db_data:
+    driver: local
+  redis_data:
     driver: local
