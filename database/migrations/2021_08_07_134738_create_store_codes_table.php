@@ -14,11 +14,11 @@ class CreateStoreCodesTable extends Migration
     public function up()
     {
         Schema::create('store_codes', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('store_name', 100);
             $table->string('store_code', 100)->unique()->nullable();
-            $table->float('lat');
-            $table->float('lon');
+            $table->float('lat', '9', '7');
+            $table->float('lon', '10', '7');
             $table->timestamps();
 
             $table->index('store_code');
