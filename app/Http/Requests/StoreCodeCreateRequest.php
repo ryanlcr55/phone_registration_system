@@ -16,8 +16,8 @@ class StoreCodeCreateRequest extends FormRequest
     {
         return [
             'store_name' => 'bail|required|string',
-            'lan' => 'bail|required|float',
-            'lot' => 'bail|required|float',
+            'lat' => 'bail|required|numeric',
+            'lon' => 'bail|required|numeric',
         ];
     }
 }

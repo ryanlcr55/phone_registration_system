@@ -2,11 +2,14 @@
 
 namespace App\Entities;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
 class StoreCode extends Model
 {
+    use HasFactory;
+
     const REDIS_KEY = 'store_codes';
 
     /**
@@ -17,8 +20,8 @@ class StoreCode extends Model
     protected $fillable = [
         'store_name',
         'store_code',
-        'lan',
-        'lot',
+        'lat',
+        'lon',
     ];
 
     public function registrationRecords()
@@ -26,7 +29,7 @@ class StoreCode extends Model
         return $this->hasMany(PhoneRegistrationRecord::class, 'store_code', 'store_code');
     }
 
-    static function redisDataForm(StoreCode $storeCode) :string
+    static function redisDataForm(StoreCode $storeCode): string
     {
         return $storeCode->toJson();
     }

@@ -7,7 +7,7 @@ use App\Entities\StoreCode;
 use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\DB;
 
-class CreateStoreCodeService
+class StoreCodeCreateService
 {
     protected $storeCodeModel;
 
@@ -17,13 +17,13 @@ class CreateStoreCodeService
         $this->storeCodeModel = $storeCodeModel;
     }
 
-    public function createStoreCode(string $storeName,float $lan,float $lon) {
+    public function createStoreCode(string $storeName,float $lat,float $lon) {
         try {
             DB::beginTransaction();
             $storeCode = $this->storeCodeModel::query()
                 ->create([
                     'store_name' => $storeName,
-                    'lan' => $lan,
+                    'lat' => $lat,
                     'lon' => $lon,
                 ]);
             $storeCode->update([
@@ -36,7 +36,7 @@ class CreateStoreCodeService
             return $storeCode;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new CustomException('Failed to generate store code', CustomException::ERROR_CODE_STORE_CODE_FAIL_TO_GENERATE);
+            throw new CustomException($e->getMessage(), CustomException::ERROR_CODE_STORE_CODE_FAIL_TO_GENERATE);
         }
     }
 }
