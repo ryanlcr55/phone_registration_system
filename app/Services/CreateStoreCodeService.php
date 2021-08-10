@@ -6,7 +6,6 @@ namespace App\Services;
 use App\Entities\StoreCode;
 use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 
 class CreateStoreCodeService
 {
@@ -32,8 +31,8 @@ class CreateStoreCodeService
             ]);
             $storeCode = $this->storeCodeModel::query()->find($storeCode->id);
             DB::commit();
-
-            Redis::hset($this->storeCodeModel::REDIS_KEY, $storeCode, $this->storeCodeModel::redisDataForm($storeCode));
+            $storeCodeExistService = new StoreCodeExistedService($this->storeCodeModel);
+            $storeCodeExistService->setStoreCodeToRedis($storeCode);
             return $storeCode;
         } catch (\Exception $e) {
             DB::rollBack();
