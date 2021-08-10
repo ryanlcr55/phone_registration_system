@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Responsable;
 
 class CustomResponse implements Responsable
 {
-    const STATUS_CODE_SUCCESS = '0x000';
+    const STATUS_CODE_SUCCESS = 0x000;
     private $payload;
     private $statusCode;
     protected $message;
@@ -30,7 +30,7 @@ class CustomResponse implements Responsable
     public function toResponse($request)
     {
         $response = [
-            'status_code' => $this->statusCode,
+            'status_code' => sprintf('0x%03X', $this->statusCode),
             'result' => $this->payload,
             'message' => $this->message,
         ];
