@@ -27,7 +27,7 @@ class StoreCodeCreateService
                     'lon' => $lon,
                 ]);
             $storeCode->update([
-                'store_code' => sprintf("%08x", $storeCode->id),
+                'store_code' => sprintf("%015d", $storeCode->id),
             ]);
             $storeCode = $this->storeCodeModel::query()->find($storeCode->id);
             DB::commit();

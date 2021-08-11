@@ -24,7 +24,7 @@ class StoreCodeFactory extends Factory
     {
         return [
             'store_name' => $this->faker->name,
-            'store_code' => Str::random(8),
+            'store_code' => sprintf("%015d", random_int(1,999999999999999)),
             'lat' => $this->faker->randomFloat(7,-99,99),
             'lon' => $this->faker->randomFloat(7, -200, 200),
         ];
