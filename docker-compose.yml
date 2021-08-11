@@ -53,6 +53,15 @@ services:
     networks:
       - app-network
 
+  worker:
+      build: .docker/php-worker
+      volumes:
+          - ./:/var/workspace
+          - ./.docker/php-worker/workers:/etc/supervisor/conf.d
+          - ./.docker/php-worker/logs:/var/log/workers
+      networks:
+          - app-network
+
 #Docker Networks
 networks:
   app-network:
