@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Entities\StoreCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class StoreCodeFactory extends Factory
 {
@@ -23,9 +24,9 @@ class StoreCodeFactory extends Factory
     {
         return [
             'store_name' => $this->faker->name,
-            'store_code' => StoreCode::all()->random()->store_code,
-            'lan' => $this->faker->randomFloat(),
-            'lon' => $this->faker->randomFloat(),
+            'store_code' => Str::random(8),
+            'lat' => $this->faker->randomFloat(7,-99,99),
+            'lon' => $this->faker->randomFloat(7, -200, 200),
         ];
     }
 }
