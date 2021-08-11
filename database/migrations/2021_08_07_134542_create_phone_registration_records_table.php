@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistrationRecordsTable extends Migration
+class CreatePhoneRegistrationRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRegistrationRecordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('registration_records', function (Blueprint $table) {
+        Schema::create('phone_registration_records', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('phone_num', 11);
             $table->string('store_code', 100);
@@ -31,6 +31,6 @@ class CreateRegistrationRecordsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registration_records');
+        Schema::dropIfExists('phone_registration_records');
     }
 }
