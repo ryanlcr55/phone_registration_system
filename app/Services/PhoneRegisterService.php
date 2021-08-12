@@ -52,7 +52,7 @@ class PhoneRegisterService
      */
     public function getFormattedPhoneNum(string $phoneNum): string
     {
-        if (preg_match('/^\(\+886\)(\d{9})(\d{3})(\d{4})$/', $phoneNum, $matches)) {
+        if (preg_match('/^(\(\+886\))(\d{9})$/', $phoneNum, $matches)) {
             // (+886)912345678 type
             return '0'.$matches[2];
         } elseif (preg_match('/^(09)(\d{8})$/', $phoneNum, $matches)) {
