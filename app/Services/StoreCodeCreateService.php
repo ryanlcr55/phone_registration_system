@@ -31,8 +31,7 @@ class StoreCodeCreateService
             ]);
             $storeCode = $this->storeCodeModel::query()->find($storeCode->id);
             DB::commit();
-            $storeCodeExistService = new StoreCodeExistedService($this->storeCodeModel);
-            $storeCodeExistService->setStoreCodeToRedis($storeCode);
+
             return $storeCode;
         } catch (\Exception $e) {
             DB::rollBack();
