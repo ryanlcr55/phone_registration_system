@@ -17,23 +17,23 @@ class PhoneRegistrationRecordController extends BaseController
 {
     use DispatchesJobs, ValidatesRequests, Formatter;
 
-    protected $model;
+    /** @var PhoneRegisterService $phoneRegisterService */
+    protected $phoneRegisterService;
 
-    public function __construct()
+    public function __construct(PhoneRegisterService $phoneRegisterService)
     {
+        $this->phoneRegisterService = $phoneRegisterService;
     }
 
     public function create(PhoneRegistrationRecordCreateRequest $request)
     {
-        /** @var PhoneRegisterService $phoneRegisterService */
-        $phoneRegisterService = app()->make(PhoneRegisterService::class);
         $requestData = $request->validated();
         $formattedPhoneNum = $this->getFormattedPhoneNum($requestData['from']);
         $formattedStoreCode = $this->getFormattedStoreCodeInText($requestData['text']);
         throw_unless(resolve(StoreCodeExistedService::class)->checkStoreCodeExisted($formattedStoreCode),
             new CustomException('store code does not exist', CustomException::ERROR_CODE_STORE_DOSE_NOT_EXISTED));
 
-        $phoneRegisterService->dispatchPhoneRegisterJob($formattedPhoneNum, $formattedStoreCode, Carbon::parse($requestData['time']));
+        $this->phoneRegisterService->dispatchPhoneRegisterJob($formattedPhoneNum, $formattedStoreCode, Carbon::parse($requestData['time']));
 
         return new CustomResponse();
     }
