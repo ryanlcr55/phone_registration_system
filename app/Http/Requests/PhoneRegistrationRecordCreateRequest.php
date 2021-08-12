@@ -15,9 +15,9 @@ class PhoneRegistrationRecordCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'time' => 'bail|required|string',
             'from' => 'bail|required|string',
             'text' => 'bail|required|string',
+            'time' => 'bail|required|date_format:Y-m-d\TH:i:s',
         ];
     }
 

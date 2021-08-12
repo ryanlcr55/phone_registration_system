@@ -25,7 +25,7 @@ class PhoneRegistrationRecordController extends BaseController
         /** @var PhoneRegisterService $phoneRegisterService */
         $phoneRegisterService = app()->make(PhoneRegisterService::class);
         $requestData = $request->validated();
-        $phoneRegisterService->dispatchPhoneRegisterJob($requestData['phone_num'], $requestData['store_code'], Carbon::now());
+        $phoneRegisterService->dispatchPhoneRegisterJob($requestData['from'], $requestData['text'], $requestData['time']);
 
         return new CustomResponse();
     }
