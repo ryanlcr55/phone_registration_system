@@ -76,7 +76,7 @@ class PhoneRegisterService
     public function getFormattedStoreCodeInText(string $text): string
     {
         // clear space and add '.' to match preg_replace's pattern
-        $textWithoutSpace = preg_replace('/\s+/', '', $text).',';
+        $textWithoutSpace = '.' . preg_replace('/\s+/', '', $text).',';
         if (preg_match("/[^0-9]]*([\d]{15})\D/i", $textWithoutSpace, $matches)) {
             return $matches[1];
         }
