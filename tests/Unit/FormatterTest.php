@@ -2,26 +2,20 @@
 
 namespace Tests\Unit;
 
+use App\Libs\Formatter;
 use App\Services\PhoneRegisterService;
 use Tests\TestCase;
 
-class PhoneRegisterServiceTest extends TestCase
+class FormatterTest extends TestCase
 {
-    /** @var  PhoneRegisterService $phoneRegisterService */
-    protected $phoneRegisterService;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->phoneRegisterService = resolve(PhoneRegisterService::class);
-    }
+    use Formatter;
 
     /**
      * @dataProvider phone_num_provider
      */
     public function test_get_formatted_phone_num($phones, $expects)
     {
-        $this->assertEquals($this->phoneRegisterService->getFormattedPhoneNum($phones), $expects);
+        $this->assertEquals($this->getFormattedPhoneNum($phones), $expects);
     }
 
     /**
@@ -29,7 +23,7 @@ class PhoneRegisterServiceTest extends TestCase
      */
     public function test_get_formatted_store_code_in_text($texts, $expects)
     {
-        $this->assertEquals($this->phoneRegisterService->getFormattedStoreCodeInText($texts), $expects);
+        $this->assertEquals($this->getFormattedStoreCodeInText($texts), $expects);
     }
 
     public function phone_num_provider()
