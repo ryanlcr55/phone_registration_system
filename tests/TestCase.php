@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+    use RefreshDatabase;
 
     public function setUp(): void
     {

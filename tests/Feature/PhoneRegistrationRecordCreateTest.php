@@ -25,8 +25,9 @@ class PhoneRegistrationRecordCreateTest extends TestCase
     {
         Queue::fake();
         $response = $this->post('/api/phoneRegistrationRecord/', [
-            'phone_num' => '0912122212',
-            'store_code' => $this->storeCode->store_code,
+            'from' => '0912122212',
+            'text' => '場所代碼：' . $this->storeCode->store_code . '\n本簡訊是簡訊實聯制發送，限防疫目的使用',
+            'time' => Carbon::now()->format('Y-m-d\TH:i:s')
         ]);
         $response->assertSuccessful();
         Queue::assertPushed(PhoneRegister::class, 1);
