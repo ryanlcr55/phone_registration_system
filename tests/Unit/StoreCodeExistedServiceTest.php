@@ -11,9 +11,6 @@ use Tests\TestCase;
 
 class StoreCodeExistedServiceTest extends TestCase
 {
-    use CreatesApplication;
-    use RefreshDatabase;
-
     /** @var  StoreCodeExistedService $storeCodeExistedService  */
     protected $storeCodeExistedService;
     protected $storeCode;

@@ -10,8 +10,6 @@ use Tests\TestCase;
 
 class StoreCodeCreateTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_api_create_store_code()
     {
         $response = $this->post('/api/storeCode/', [
