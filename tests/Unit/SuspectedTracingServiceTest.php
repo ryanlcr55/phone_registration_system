@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Entities\PhoneRegistrationRecord;
 use App\Entities\StoreCode;
