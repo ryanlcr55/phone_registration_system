@@ -21,7 +21,7 @@ class PhoneRegistrationRecordCreateTest extends TestCase
         $this->storeCode = StoreCode::factory()->create()->refresh();
     }
 
-    public function test_phone_registration_create_api()
+    public function testPhoneRegistrationCreateApi()
     {
         Queue::fake();
         $response = $this->post('/api/phoneRegistrationRecord/', [

@@ -4,9 +4,7 @@ namespace Tests\Unit;
 
 use App\Entities\StoreCode;
 use App\Services\StoreCodeExistedService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Redis;
-use Tests\CreatesApplication;
 use Tests\TestCase;
 
 class StoreCodeExistedServiceTest extends TestCase
@@ -22,7 +20,7 @@ class StoreCodeExistedServiceTest extends TestCase
         $this->storeCode = StoreCode::factory()->create()->refresh();
     }
 
-    public function test_set_store_code_to_redis()
+    public function testSetStoreCodeToRedis()
     {
         $this->storeCodeExistedService->setStoreCodeToRedis($this->storeCode);
 
@@ -30,7 +28,7 @@ class StoreCodeExistedServiceTest extends TestCase
         self::assertEquals($this->storeCode->store_code, $storeCodeInRedis['store_code']);
     }
 
-    public function test_check_store_code_existed()
+    public function testCheckStoreCodeExisted()
     {
         $this->assertTrue($this->storeCodeExistedService->checkStoreCodeExisted($this->storeCode->store_code));
 
@@ -43,7 +41,7 @@ class StoreCodeExistedServiceTest extends TestCase
         $this->assertTrue((bool) Redis::hexists(StoreCode::REDIS_KEY, $this->storeCode->store_code));
     }
 
-    public function test_check_store_code_does_not_exist()
+    public function testCheckStoreCodeDoesNotExist()
     {
         $storeCode = 'aaaaa';
         StoreCode::query()->where('store_code', $storeCode)->delete();
