@@ -26,7 +26,7 @@ class SuspectedTracingServiceTest extends TestCase
 
     }
 
-    public function test_get_registrations()
+    public function testGetRegistrations()
     {
         $referenceDateTime = Carbon::now();
 

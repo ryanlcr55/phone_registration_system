@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Libs\Formatter;
-use App\Services\PhoneRegisterService;
 use Tests\TestCase;
 
 class FormatterTest extends TestCase
@@ -11,22 +10,22 @@ class FormatterTest extends TestCase
     use Formatter;
 
     /**
-     * @dataProvider phone_num_provider
+     * @dataProvider phoneNumProvider
      */
-    public function test_get_formatted_phone_num($phones, $expects)
+    public function testGetFormattedPhoneNum($phones, $expects)
     {
         $this->assertEquals($this->getFormattedPhoneNum($phones), $expects);
     }
 
     /**
-     * @dataProvider store_code_text_provider
+     * @dataProvider storeCodeTextProvider
      */
-    public function test_get_formatted_store_code_in_text($texts, $expects)
+    public function testGetFormattedStoreCodeInText($texts, $expects)
     {
         $this->assertEquals($this->getFormattedStoreCodeInText($texts), $expects);
     }
 
-    public function phone_num_provider()
+    public function phoneNumProvider()
     {
         return [
             ['0912345678', '0912345678'],
@@ -35,7 +34,7 @@ class FormatterTest extends TestCase
         ];
     }
 
-    public function store_code_text_provider()
+    public function storeCodeTextProvider()
     {
         return [
             ['場所代碼：1111 1111 1111 111\n本簡訊是簡訊實聯制發送，限防疫目的使用', '111111111111111'],
