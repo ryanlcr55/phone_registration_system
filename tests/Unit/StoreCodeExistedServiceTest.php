@@ -43,4 +43,11 @@ class StoreCodeExistedServiceTest extends TestCase
         $this->assertTrue((bool) Redis::hexists(StoreCode::REDIS_KEY, $this->storeCode->store_code));
     }
 
+    public function test_check_store_code_does_not_exist()
+    {
+        $storeCode = 'aaaaa';
+        StoreCode::query()->where('store_code', $storeCode)->delete();
+        Redis::hdel(StoreCode::REDIS_KEY, $storeCode);
+        $this->assertFalse($this->storeCodeExistedService->checkStoreCodeExisted($storeCode));
+    }
 }
