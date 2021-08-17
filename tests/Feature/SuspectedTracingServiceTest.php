@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Entities\PhoneRegistrationRecord;
 use App\Entities\Store;
@@ -28,36 +28,47 @@ class SuspectedTracingServiceTest extends TestCase
 
     public function testGetRegistrations()
     {
-        $referenceDateTime = Carbon::now();
+        $referenceDateTime = Carbon::now()->format('Y-m-d\TH:i:s');
 
         // 感染者在第二天進入商店
         $infectedRecord = PhoneRegistrationRecord::factory()->create([
-            'phone_num' => '0911111',
+            'phone_num' => '0911111111',
             'store_code' => $this->store->store_code,
-            'registration_datetime' => Carbon::now()->addDays(2)->format('Y-m-d H:i:s'),
+            'registration_datetime' => Carbon::now()->addDays(1)->format('Y-m-d H:i:s'),
         ])->refresh();
 
-        // 民眾A 在第八天與感染者進入同商店 (感染者進入該商店往後推七天內), 應被撈出
+        // 民眾A 在第1天與感染者進入同商店, (感染者尚未進入該商店), 應不被撈出
         $suspectedA = PhoneRegistrationRecord::factory()->create([
+            'phone_num' => '09000000',
+            'store_code' => $infectedRecord->store_code,
+            'registration_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+        ])->refresh();
+
+        // 民眾B 在第八天與感染者進入同商店 (感染者進入該商店往後推七天內), 應被撈出
+        $suspectedB = PhoneRegistrationRecord::factory()->create([
             'phone_num' => '0922222',
             'store_code' => $infectedRecord->store_code,
-            'registration_datetime' => Carbon::now()->addDays(8)->format('Y-m-d H:i:s'),
+            'registration_datetime' => Carbon::now()->addDays(7)->format('Y-m-d H:i:s'),
         ])->refresh();
 
         // 民眾B 在第10天與感染者進入同商店, (感染者進入該商店往後推超過七天), 應不被撈出
-        $suspectedB = PhoneRegistrationRecord::factory()->create([
+        $suspectedC = PhoneRegistrationRecord::factory()->create([
             'phone_num' => '09133333',
             'store_code' => $infectedRecord->store_code,
-            'registration_datetime' => Carbon::now()->addDays(10)->format('Y-m-d H:i:s'),
+            'registration_datetime' => Carbon::now()->addDays(9)->format('Y-m-d H:i:s'),
         ])->refresh();
 
-        $result = $this->suspectedTracingService->getSuspectedRegistrations($infectedRecord->phone_num, $referenceDateTime, $this->rageDays, $this->numberPerPage, 1);
+        $response = $this->call('GET',"/api/phoneRegistrationRecord/suspected", [
+            'from' => $infectedRecord->phone_num,
+            'time' => $referenceDateTime,
+            'page' => 1,
+        ]);
 
+        $response->assertSuccessful();
         // 應只有撈出一筆
-        $this->assertEquals(1, $result['total']);
-        // 且該筆資料為 在設定時間 (7天)內的 顧客A
-        $result['data']->first();
-        $this->assertEquals($suspectedA->phone_num, $result['data']->first()['phone_num']);
+        $this->assertEquals(1, $response['total']);
+        // 且該筆資料為 在設定時間 (7天)內的 顧客B
+        $this->assertEquals($suspectedB->phone_num, collect($response['data'])->first()['phone_num']);
 
     }
 }
