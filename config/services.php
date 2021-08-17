@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'location' => [
+        'service' => env('LOCATION_SERVICE', 'gecoding'),
+        'geocoding_api_key' => env('GOOGLE_GECODING_API_KEY'),
+    ],
 ];
