@@ -31,7 +31,7 @@ return [
     ],
 
     'location' => [
-        'service' => env('LOCATION_SERVICE', 'gecoding'),
-        'geocoding_api_key' => env('GOOGLE_GECODING_API_KEY'),
+        'service' => env('LOCATION_SERVICE', 'geocoding'),
+        'geocoding_api_key' => env('GOOGLE_GEOCODING_API_KEY'),
     ],
 ];

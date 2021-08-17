@@ -6,7 +6,7 @@ use App\Contracts\LocationContract;
 use App\Exceptions\CustomException;
 use GuzzleHttp\Client;
 
-class Gecoding implements LocationContract
+class GeocodingService implements LocationContract
 {
     private $apiKey;
 
