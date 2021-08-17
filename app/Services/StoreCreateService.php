@@ -3,36 +3,36 @@
 namespace App\Services;
 
 
-use App\Entities\StoreCode;
+use App\Entities\Store;
 use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\DB;
 
-class StoreCodeCreateService
+class StoreCreateService
 {
-    protected $storeCodeModel;
+    protected $storeModel;
 
     public function __construct(
-        StoreCode $storeCodeModel
+        Store $storeModel
     ) {
-        $this->storeCodeModel = $storeCodeModel;
+        $this->storeModel = $storeModel;
     }
 
-    public function createStoreCode(string $storeName,float $lat,float $lon) {
+    public function createStore(string $storeName,float $lat,float $lon) {
         try {
             DB::beginTransaction();
-            $storeCode = $this->storeCodeModel::query()
+            $store = $this->storeModel::query()
                 ->create([
                     'store_name' => $storeName,
                     'lat' => $lat,
                     'lon' => $lon,
                 ]);
-            $storeCode->update([
-                'store_code' => sprintf("%015d", $storeCode->id),
+            $store->update([
+                'store_code' => sprintf("%015d", $store->id),
             ]);
-            $storeCode = $this->storeCodeModel::query()->find($storeCode->id);
+            $store = $this->storeModel::query()->find($store->id);
             DB::commit();
 
-            return $storeCode;
+            return $store;
         } catch (\Exception $e) {
             DB::rollBack();
             throw new CustomException($e->getMessage(), CustomException::ERROR_CODE_STORE_CODE_FAIL_TO_GENERATE);

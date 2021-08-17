@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Entities\StoreCode;
+use App\Entities\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class StoreCodeFactory extends Factory
+class StoreFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = StoreCode::class;
+    protected $model = Store::class;
 
     /**
      * Define the model's default state.

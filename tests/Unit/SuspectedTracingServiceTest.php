@@ -2,7 +2,7 @@
 namespace Tests\Unit;
 
 use App\Entities\PhoneRegistrationRecord;
-use App\Entities\StoreCode;
+use App\Entities\Store;
 use App\Services\SuspectedTracingService;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -13,7 +13,7 @@ class SuspectedTracingServiceTest extends TestCase
     protected $suspectedTracingService;
     protected $numberPerPage;
     protected $rageDays;
-    protected $storeCode;
+    protected $store;
 
     public function setUp(): void
     {
@@ -22,7 +22,7 @@ class SuspectedTracingServiceTest extends TestCase
         $this->suspectedTracingService = resolve(SuspectedTracingService::class);
         $this->numberPerPage = 10;
         $this->rageDays = 7;
-        $this->storeCode = StoreCode::factory()->create()->refresh();
+        $this->store = Store::factory()->create()->refresh();
 
     }
 
@@ -33,7 +33,7 @@ class SuspectedTracingServiceTest extends TestCase
         // 感染者在第二天進入商店
         $infectedRecord = PhoneRegistrationRecord::factory()->create([
             'phone_num' => '0911111',
-            'store_code' => $this->storeCode->store_code,
+            'store_code' => $this->store->store_code,
             'registration_datetime' => Carbon::now()->addDays(2)->format('Y-m-d H:i:s'),
         ])->refresh();
 
