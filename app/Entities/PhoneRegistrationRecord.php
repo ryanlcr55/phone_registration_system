@@ -24,7 +24,7 @@ class PhoneRegistrationRecord extends Model
     public function store()
     {
         return $this->belongsTo(
-            StoreCode::class,
+            Store::class,
             'store_code',
             'store_code',
         );

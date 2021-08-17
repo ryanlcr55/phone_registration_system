@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class StoreCode extends Model
+class Store extends Model
 {
     use HasFactory;
 
-    const REDIS_KEY = 'store_codes';
+    const REDIS_KEY = 'stores';
 
     /**
      * The attributes that are mass assignable.
@@ -29,8 +29,8 @@ class StoreCode extends Model
         return $this->hasMany(PhoneRegistrationRecord::class, 'store_code', 'store_code');
     }
 
-    static function redisDataForm(StoreCode $storeCode): string
+    static function redisDataForm(Store $store): string
     {
-        return $storeCode->toJson();
+        return $store->toJson();
     }
 }

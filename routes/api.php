@@ -8,6 +8,6 @@ Route::group(['prefix' => 'phoneRegistrationRecord'], function () {
     Route::post('/', 'PhoneRegistrationRecordController@create');
 });
 
-Route::group(['prefix' => 'storeCode'], function () {
-    Route::post('/', 'StoreCodeController@create');
+Route::group(['prefix' => 'store'], function () {
+    Route::post('/', 'StoreController@create');
 });

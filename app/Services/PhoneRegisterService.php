@@ -4,9 +4,7 @@ namespace App\Services;
 
 
 use App\Entities\PhoneRegistrationRecord;
-use App\Exceptions\CustomException;
 use App\Jobs\PhoneRegister;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class PhoneRegisterService

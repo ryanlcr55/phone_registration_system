@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Entities\PhoneRegistrationRecord;
-use App\Entities\StoreCode;
+use App\Entities\Store;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +25,7 @@ class PhoneRegistrationRecordFactory extends Factory
     {
         return [
             'phone_num' => $this->faker->phoneNumber(),
-            'store_code' => StoreCode::all()->random()->store_code,
+            'store_code' => Store::all()->random()->store_code,
             'registration_datetime' => $this->faker->dateTimeBetween(Carbon::now()->subWeeks(2), Carbon::now()),
         ];
     }
