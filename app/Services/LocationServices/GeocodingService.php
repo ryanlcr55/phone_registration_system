@@ -9,15 +9,17 @@ use GuzzleHttp\Client;
 class GeocodingService implements LocationContract
 {
     private $apiKey;
+    protected $lat;
+    protected $lon;
 
     public function __construct()
     {
         $this->apiKey = config('services.location.geocoding_api_key');
     }
 
-    public function getLatLon(string $address): array
+    public function callOutsideService(string $address): void
     {
-        $client = new Client(['base_uri' => 'https://maps.googleapis.com', 'timeout'=> 10]);
+        $client = new Client(['base_uri' => 'https://maps.googleapis.com', 'timeout' => 10]);
         $response = $client->get('/maps/api/geocode/json', [
             'query' => [
                 'address' => $address,
@@ -31,9 +33,22 @@ class GeocodingService implements LocationContract
             new CustomException('Geocoding fail.', CustomException::ERROR_CODE_LOCATION_SERVICE_GOCODING_FAIL)
         );
 
-        return [
-            'lat' => $response['results'][0]['geometry']['location']['lat'],
-            'lon' => $response['results'][0]['geometry']['location']['lng'],
+        [
+            $this->lat,
+            $this->lon,
+        ] = [
+            $response['results'][0]['geometry']['location']['lat'],
+            $response['results'][0]['geometry']['location']['lng'],
         ];
+    }
+
+    public function getLat(): float
+    {
+        return (float) $this->lat;
+    }
+
+    public function getLon(): float
+    {
+        return (float) $this->lon;
     }
 }

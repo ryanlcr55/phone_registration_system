@@ -32,8 +32,8 @@ class StoreController extends BaseController
         if (empty($requestData['lat']) && empty($requestData['lon']) && !empty($requestData['address'])) {
             /** @var LocationContract $locationService */
             $locationService = resolve(LocationContract::class);
-            $locationInfo = $locationService->getLatLon($requestData['address']);
-            [$lan, $lon] = [$locationInfo['lat'], $locationInfo['lon']];
+            $locationService->callOutsideService($requestData['address']);
+            [$lan, $lon] = [$locationService->getLat(), $locationService->getLon()];
         } else {
             [$lan, $lon] = [$requestData['lat'], $requestData['lon']];
         }
