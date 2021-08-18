@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\LocationContract;
 use App\Http\Requests\StoreCreateRequest;
 use App\Http\Responses\CustomResponse;
 use App\Services\StoreCreateService;
@@ -28,7 +29,16 @@ class StoreController extends BaseController
     public function create(StoreCreateRequest $request)
     {
         $requestData = $request->validated();
-        $store = $this->createService->createStore($requestData['store_name'], $requestData['lat'], $requestData['lon']);
+        if (empty($requestData['lat']) && empty($requestData['lon']) && !empty($requestData['address'])) {
+            /** @var LocationContract $locationService */
+            $locationService = resolve(LocationContract::class);
+            $locationService->callOutsideService($requestData['address']);
+            [$lan, $lon] = [$locationService->getLat(), $locationService->getLon()];
+        } else {
+            [$lan, $lon] = [$requestData['lat'], $requestData['lon']];
+        }
+
+        $store = $this->createService->createStore($requestData['store_name'], $lan, $lon);
         $this->storeExistedService->setStoreToRedis($store);
 
         return new CustomResponse($store);
