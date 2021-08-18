@@ -27,11 +27,13 @@ class GeocodingService implements LocationContract
         ]);
         $response = json_decode($response->getBody()->getContents(), true);
         throw_if(
+            $response['status'] != 'OK',
             new CustomException('Geocoding fail.', CustomException::ERROR_CODE_LOCATION_SERVICE_GOCODING_FAIL)
         );
+
         return [
-            'lat' => $response['results']['address_components']['geometry']['location']['lat'],
-            'lon' => $response['results']['address_components']['geometry']['location']['lng'],
+            'lat' => $response['results'][0]['geometry']['location']['lat'],
+            'lon' => $response['results'][0]['geometry']['location']['lng'],
         ];
     }
 }
