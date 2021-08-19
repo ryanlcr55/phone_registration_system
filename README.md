@@ -17,9 +17,9 @@ $ ./setup.sh
 
 ## Test
 ```
-   $docker-compose exec app php artisan test
+   $ docker-compose exec app php artisan test
 ```
-#### notice: 若未填入` create store with address api` 測試無法通過
+#### notice: 若未填入 `GOOGLE_GEOCODING_API_KEY` 時` create store with address api` 測試無法通過
 
 
 ## API
