@@ -32,7 +32,7 @@ services:
     tty: true
     command: redis-server
     ports:
-      - 6379:6379
+      - 50001:6379
     volumes:
       - redis_data:/bitnami/redis/data
     networks:
@@ -44,7 +44,7 @@ services:
     tty: true
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - "3306:3306"
+      - 50002:6379
     environment:
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: root
