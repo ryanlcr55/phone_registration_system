@@ -20,8 +20,7 @@ class StoreCreateService
     public function createStore(string $storeName,float $lat,float $lon) {
         try {
             DB::beginTransaction();
-            $store = $this->storeModel::query()
-                ->create([
+            $store = $this->storeModel::create([
                     'store_name' => $storeName,
                     'lat' => $lat,
                     'lon' => $lon,
@@ -29,7 +28,7 @@ class StoreCreateService
             $store->update([
                 'store_code' => sprintf("%015d", $store->id),
             ]);
-            $store = $this->storeModel::query()->find($store->id);
+            $store = $this->storeModel::find($store->id);
             DB::commit();
 
             return $store;

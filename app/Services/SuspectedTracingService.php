@@ -18,7 +18,8 @@ class SuspectedTracingService
 
     public function getSuspectedRegistrations(string $phoneNum, Carbon $startTime, int $rageDays, int $numberPerPage, int $page): array
     {
-        $query = DB::table('phone_registration_records as infected')
+        $tableName = $this->phoneRegistrationRecordModel->getTable();
+        $query = DB::table("$tableName as infected")
             ->leftJoin('phone_registration_records as suspected', 'suspected.store_code', '=', 'infected.store_code')
             ->where('infected.phone_num', '=', $phoneNum)
             ->where('suspected.phone_num', '!=', $phoneNum)
