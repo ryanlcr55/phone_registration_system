@@ -26,6 +26,17 @@ class StoreCreateTest extends TestCase
 
     public function testCreateStoreWithAddressApi()
     {
+        switch (config('services.location.service')) {
+            case 'geocoding':
+                if (empty(config('services.location.geocoding_api_key'))) {
+                    $this->markTestSkipped('geocoding api key is empty');
+                }
+                break;
+            default:
+                $this->markTestSkipped('location service is not enabled.');
+                break;
+        }
+
         $response = $this->post('/api/store/', [
             'store_name' => Str::random(4),
             'address' => '台北市信義區信義路五段7號',
