@@ -19,10 +19,15 @@ class PhoneRegistrationRecordController extends BaseController
 {
     use DispatchesJobs, ValidatesRequests, Formatter;
 
-    public function create(PhoneRegistrationRecordCreateRequest $request)
+    /**
+     * @param  PhoneRegistrationRecordCreateRequest  $request
+     * @param  PhoneRegisterService  $phoneRegisterService
+     * @return CustomResponse
+     * @throws CustomException
+     * @throws \Throwable
+     */
+    public function create(PhoneRegistrationRecordCreateRequest $request, PhoneRegisterService $phoneRegisterService)
     {
-        /** @var PhoneRegisterService $phoneRegisterService */
-        $phoneRegisterService = resolve(PhoneRegisterService::class);
         $requestData = $request->validated();
         $formattedPhoneNum = $this->getFormattedPhoneNum($requestData['from']);
         $formattedStoreCode = $this->getFormattedStoreCodeInText($requestData['text']);
@@ -35,10 +40,14 @@ class PhoneRegistrationRecordController extends BaseController
         return new CustomResponse();
     }
 
-    public function getSuspectedRecode(PhoneRegistrationGetSuspectedRecordRequest $request)
+    /**
+     * @param  PhoneRegistrationGetSuspectedRecordRequest  $request
+     * @param  SuspectedTracingService  $suspectedTracingService
+     * @return array
+     * @throws CustomException
+     */
+    public function getSuspectedRecode(PhoneRegistrationGetSuspectedRecordRequest $request, SuspectedTracingService $suspectedTracingService)
     {
-        /** @var SuspectedTracingService $suspectedTracingService */
-        $suspectedTracingService = resolve(SuspectedTracingService::class);
         $rangeDays = config('tracking.get_registration_range_days');
         $numberPerPage = config('tracking.number_per_page');
         $requestData = $request->validated();

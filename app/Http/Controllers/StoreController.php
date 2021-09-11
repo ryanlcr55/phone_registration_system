@@ -26,12 +26,16 @@ class StoreController extends BaseController
         $this->storeExistedService = $storeExistedService;
     }
 
-    public function create(StoreCreateRequest $request)
+    /**
+     * @param  StoreCreateRequest  $request
+     * @param  LocationContract  $locationService
+     * @return CustomResponse
+     * @throws \App\Exceptions\CustomException
+     */
+    public function create(StoreCreateRequest $request, LocationContract $locationService)
     {
         $requestData = $request->validated();
         if (empty($requestData['lat']) && empty($requestData['lon']) && !empty($requestData['address'])) {
-            /** @var LocationContract $locationService */
-            $locationService = resolve(LocationContract::class);
             $locationService->callOutsideService($requestData['address']);
             [$lan, $lon] = [$locationService->getLat(), $locationService->getLon()];
         } else {
