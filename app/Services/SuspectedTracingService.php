@@ -39,7 +39,7 @@ class SuspectedTracingService
                 return [
                     'phone_num' => $registration->phone_num,
                     'store_code' => $registration->store_code,
-                    'registration_datetime' => Carbon::parse($registration->registration_datetime)->format('Y-m-d/TH:i:s')
+                    'registration_datetime' => Carbon::parse($registration->registration_datetime)->format('Y-m-d\TH:i:s')
                 ];
             });
 
